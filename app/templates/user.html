@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{%block title %}
+{{ user.username }}的资料
+{%endblock%}
+
+{% block content %}
+{{ super() }}
+<div class="container">
+    <div class="page-header">
+        <h1>{{ user.full_name }} 的资料</h1>
+    </div>
+    <div class ="col-md-2">
+        <img class="img-circle" src={{ user.gravatar(size=140) }} />
+    </div>
+    <div class="col-md-10">
+        <p>姓名: {{ user.full_name }}</p>
+        {% if user.location %}
+        <p>位置： {{ user.location }}</p>
+        {% endif %}
+        {% if user.location %}
+        <p>关于我： {{ user.about_me }}</p>
+        {% endif %}
+        <p>登录信息： {{ user.last_login.strftime("%Y-%m-%d %H:%M:%d UTC") }}</p>
+        {%if user == current_user %}
+        <a class= "btn btn-default" href={{ url_for(".edit_profile") }}>编辑</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

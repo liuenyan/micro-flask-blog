@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container padding-top">
-    <h1>Hello {{ current_user.name }}</h>
+{{ super() }}
+<div class="container">
+    <h1>Hello {{ current_user.username }}</h>
 </div>
 {% endblock %}
