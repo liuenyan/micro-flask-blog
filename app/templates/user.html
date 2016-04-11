@@ -21,7 +21,7 @@
         {% if user.location %}
         <p>关于我： {{ user.about_me }}</p>
         {% endif %}
-        <p>登录信息： {{ user.last_login.strftime("%Y-%m-%d %H:%M:%d UTC") }}</p>
+        <p>登录信息： {{ moment(user.last_login).fromNow() }}</p>
         {%if user == current_user %}
         <a class= "btn btn-default" href={{ url_for(".edit_profile") }}>编辑</a>
         {% endif %}

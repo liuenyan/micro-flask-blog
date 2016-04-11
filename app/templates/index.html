@@ -1,8 +1,27 @@
 {% extends "base.html" %}
-
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
 {% block content %}
 {{ super() }}
 <div class="container">
-    <h1>Hello {{ current_user.username }}</h>
+    <div>
+        {% if current_user.is_authenticated %}
+        <div class="page-header">
+            <h1>编辑文章</h1>
+        </div>
+        {{ wtf.quick_form(form) }}
+        {% endif %}
+    </div>
+    <div>
+        {% include "_post.html" %}
+    </div>
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination, '.index') }}
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
 {% endblock %}

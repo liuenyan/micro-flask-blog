@@ -1,3 +1,54 @@
 .padding-top {
     padding-top: 50px;
 }
+
+ul.posts{
+    list-style-type: none;
+    margin: 10px;
+    padding: 10px;
+}
+
+li.post {
+    margin: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #efefef;
+}
+
+.post-title {
+    margin-left: 10px;
+}
+
+.profile-thumbnail {
+    position: absolute;
+    margin-left: 10px;
+}
+
+.post-info {
+    position: absolute;
+    margin-left: 60px;
+    margin-top: 10px;
+}
+
+.post-body {
+    margin: 80px 10px 80px 10px;
+}
+
+.post-footer {
+    margin: 5px 10px 5px 10px;
+    text-align: right;
+}
+
+div.flask-pagedown-preview {
+    margin: 10px 0px 10px 0px;
+    border: 1px solid #e0e0e0;
+    padding: 4px;
+    min-height: 100px;
+}
+
+div.pagination {
+    width: 100%;
+    text-align: right;
+    margin: 0px;
+    padding: 0px;
+}

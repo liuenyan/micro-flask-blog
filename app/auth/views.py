@@ -5,6 +5,7 @@ from . import auth
 from ..models import User
 from flask.ext.login import login_user, login_required, logout_user, current_user
 from .forms import LoginForm
+from .. import moment
 
 
 @auth.before_app_request
