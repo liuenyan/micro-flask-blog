@@ -4,16 +4,17 @@ from .. import db, moment
 from . import main
 from flask import render_template, request, redirect, url_for, abort, flash, current_app
 from flask.ext.login import login_required, current_user
-from ..models import User, Post
-from .forms import EditProfileForm, EditPostForm
+from ..models import User, Post, Role, Permission
+from .forms import EditProfileForm, EditProfileAdminForm, EditPostForm
 from datetime import datetime
-
+from ..decorators import admin_required
+import hashlib
 
 @main.route("/", methods=['GET', 'POST'])
 #@login_required
 def index():
     form = EditPostForm()
-    if form.validate_on_submit():
+    if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
         post = Post(author=current_user._get_current_object(), title=form.title.data, body=form.body.data)
         db.session.add(post)
         flash(u'文章已保存')
@@ -34,7 +35,7 @@ def post(id):
 @login_required
 def edit_post(id):
     post = Post.query.get_or_404(id)
-    if current_user != post.author:
+    if current_user != post.author and not current_user.can(Permission.WRITE_ARTICLES):
         abort(403)
     form = EditPostForm()
     if form.validate_on_submit():
@@ -72,4 +73,30 @@ def edit_profile():
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
     return render_template("edit-profile.html", form=form)
+
+
+@main.route("/edit-profile/<int:id>", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_profile_admin(id):
+    user = User.query.get_or_404(id)
+    form = EditProfileAdminForm(user)
+    if form.validate_on_submit():
+        user.email = form.email.data
+        user.avatar_hash = hashlib.md5(form.email.data.encode('utf8')).hexdigest()
+        user.username = form.username.data
+        user.role = Role.query.get(form.role.data)
+        user.full_name = form.full_name.data
+        user.location = form.location.data
+        user.about_me = form.about_me.data
+        db.session.add(user)
+        return redirect(url_for('.user', username=user.username))
+    form.email.data = user.email
+    form.username.data = user.username
+    form.role.data = user.role_id
+    form.full_name.data = user.full_name
+    form.location.data = user.location
+    form.about_me.data = user.about_me
+    return render_template('edit-profile.html', form=form, user=user)
+
 

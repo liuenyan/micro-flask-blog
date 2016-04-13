@@ -7,6 +7,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or\
             'hard to guess string'
+    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN') or \
+            'admin@domain.com'
     FLASKY_POSTS_PER_PAGE = 10
     @staticmethod
     def init_app(app):
