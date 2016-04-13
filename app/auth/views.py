@@ -4,9 +4,9 @@ from flask import render_template, redirect, request, url_for, flash
 from . import auth
 from ..models import User
 from flask.ext.login import login_user, login_required, logout_user, current_user
-from .forms import LoginForm
+from .forms import LoginForm, ChangePasswordForm
 from .. import moment
-
+from .. import db
 
 @auth.before_app_request
 def before_request():
@@ -39,3 +39,16 @@ def logout():
 def secret():
     return 'Only authenticated users are allowed!'
 
+@auth.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.old_password.data):
+            current_user.password = form.new_password.data
+            db.session.add(current_user)
+            flash(u'密码已更新')
+            return redirect(url_for('main.index'))
+        else:
+            flash(u'请输入正确的旧密码')
+    return render_template('auth/change-password.html', form=form)
