@@ -52,3 +52,9 @@ div.pagination {
     margin: 0px;
     padding: 0px;
 }
+
+ul.categories {
+    text-decoration: none;
+    list-style-type: none;
+}
+

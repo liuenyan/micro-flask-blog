@@ -56,6 +56,7 @@ class User(UserMixin, db.Model):
     last_login = db.Column(db.DateTime, default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    categories = db.relationship('Category', backref='author', lazy='dynamic')
     
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -144,6 +145,7 @@ class Post(db.Model):
     title = db.Column(db.String(64))
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
 
     def __repr__(self):
         return "<Post %r>" % self.id
@@ -173,4 +175,15 @@ class Post(db.Model):
             tags=allowed_tags, strip=True))
 
 db.event.listen(Post.body, 'set', Post.on_body_changed)
+
+
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    posts = db.relationship('Post', backref='category', lazy='dynamic')
+
+    def post_total(self):
+        return Post.query.filter_by(category=self).count()
 

@@ -5,7 +5,8 @@ from wtforms import StringField, TextAreaField, SubmitField, SelectField
 from wtforms.validators import Length, Required, Email, Regexp
 from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
-from ..models import Role, User
+from ..models import Role, User, Category
+from flask.ext.login import current_user
 
 class EditProfileForm(Form):
     full_name = StringField(u'姓名', validators=[Length(0, 64)])
@@ -39,4 +40,10 @@ class EditPostForm(Form):
     title = StringField(u'标题', validators=[Length(0, 64)])
     #body = TextAreaField(u'内容')
     body = PageDownField(u'使用MarkDown编辑内容', validators=[Required()])
+    categories = SelectField(u'分类', coerce=int)
     submit = SubmitField(u'提交')
+
+    def __init__(self):
+        super(EditPostForm, self).__init__()
+        if current_user.is_authenticated:
+            self.categories.choices = [(category.id, category.name) for category in Category.query.filter_by(author=current_user._get_current_object()).order_by(Category.name).all()]

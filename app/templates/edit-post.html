@@ -6,12 +6,41 @@
 {% endblock%}
 
 {% block content %}
+{{ super() }}
 <div class="container">
     <div class="page-header">
         <h1>编辑文章</h1>
     </div>
     <div>
-        {{ wtf.quick_form(form) }}
+        {# wtf.quick_form(form) #}
+        <form action="" method="POST" class="form" role="form">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_errors(form, hidden_tag) }}
+            {{ wtf.form_field(form.title) }}
+            {{ wtf.form_field(form.body) }}
+            {{ wtf.form_field(form.categories) }}
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-category">添加分类</button>
+            {{ wtf.form_field(form.submit) }}
+        </form>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" id="modal-add-category" role="dialog" aria-labelledby="model-label-add-category">
+    <div class="modal-dialog modal-sm" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aira-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="model-label-add-category">添加分类</h4>
+            </div>
+            <div class="modal-body">
+                <form id="new-category-form">
+                    <input type="text" id="new-category" class="form-control" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-add-category">添加</button>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -19,4 +48,5 @@
 {% block scripts %}
 {{ super() }}
 {{ pagedown.include_pagedown() }}
+<script type="text/javascript" src="/static/scripts/edit-post.js"></script>
 {% endblock %}

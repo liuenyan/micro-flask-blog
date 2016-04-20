@@ -1,6 +1,10 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 {% import "_macros.html" as macros %}
+
+{% block title %}
+文章列表
+{% endblock %}
+
 {% block content %}
 {{ super() }}
 <div class="container">
@@ -8,12 +12,7 @@
         {% include "_post.html" %}
     </div>
     <div class="pagination">
-        {{ macros.pagination_widget(pagination, '.index') }}
+        {{ macros.pagination_widget(pagination, '.category', username=username, category_id=category_id) }}
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-{{ super() }}
-{{ pagedown.include_pagedown() }}
 {% endblock %}

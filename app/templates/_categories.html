@@ -1,0 +1,8 @@
+<ul class="categories">
+    {%for category in categories %}
+    <li>
+        <a href="{{ url_for('main.category', username=author.username, category_id=category.id) }}">{{ category.name }}&nbsp;<span class="badge">{{ category.post_total() }}</span></a>
+    </li>
+    {% endfor %}
+</ul>
+
